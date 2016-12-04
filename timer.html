@@ -14,50 +14,51 @@
 <h2>Du hast noch <strong id="minutes-left"></strong> Minuten</h2>
 
 <script>
-
-function getSecondsRemaining(seconds){
-  //var remaining = Math.floor( minutes % 60 );
-  return seconds - 1;
+function getSecondsRemaining(seconds) {
+    return seconds - 1;
 }
 
 function countdown(event) {
     event.preventDefault();
-    var minutes = window.document.getElementById('minutes').value;
-    var seconds = minutes * 60;
-    var input = window.document.getElementById('minutes-left');
-    input.innerHTML = minutes;
-    console.log('seconds:' + seconds);
+    const minutes = window.document.getElementById('minutes').value;
+    let seconds = minutes * 60;
+    const input = window.document.getElementById('minutes-left');
+    input.innerHTML = `${minutes} : 00`;
+    console.log(`seconds: ${seconds}`);
 
-    var interval = setInterval(function(){
-      if (seconds <= 4) {
-        document.body.style.background = "#ff0000";
-      }
-
-      if ( seconds <= 0 ) {
-          clearInterval(interval);
+    const updateTime = function intervalFunc() {
+        if (seconds <= 4) {
+            window.document.body.style.background = '#ff0000';
         }
-        else {
-          var t = getSecondsRemaining(seconds);
-          seconds = t;
-          console.log('time remaining:' + t);
-          var minutesLeft = window.document.getElementById('minutes-left');
-          var remainingTime = Math.floor(t/60) + ' : ' + Math.round(t%60);
-          minutesLeft.innerHTML = remainingTime;
-        }
-      }, 1000);
 
-      console.log('Interval:' + interval);
+        if (seconds <= 0) {
+            clearInterval(interval);
+        } else {
+            const t = getSecondsRemaining(seconds);
+            seconds = t;
+            console.log(`time remaining: ${t}`);
+            const minutesLeft = window.document.getElementById('minutes-left');
+            const printMinutes = Math.floor(t / 60);
+            const printSeconds = Math.round(t % 60);
+            const remainingTime = `${printMinutes} : ${printSeconds}`;
+            minutesLeft.innerHTML = remainingTime;
+        }
+    };
+
+    const interval = setInterval(updateTime, 1000);
+
+    console.log(`Interval: ${interval}`);
 }
 
 function reset() {
-  document.body.style.background = "#FFFFFF";
-  window.document.getElementById('minutes').value = 0;
+    window.document.body.style.background = '#FFFFFF';
+    window.document.getElementById('minutes').value = 0;
 }
 
-var timerElement = window.document.getElementById('timerForm');
+const timerElement = window.document.getElementById('timerForm');
 timerElement.addEventListener('submit', countdown);
 
-var resetButton = window.document.getElementById('resetButton');
+const resetButton = window.document.getElementById('resetButton');
 resetButton.addEventListener('click', reset);
 
 </script>
