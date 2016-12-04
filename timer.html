@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<p>A script on this page starts this clock:</p>
+
+<form id="timerForm" action="">
+  <label>Timer - Sekunden einstellen:</label>
+  <input id="minutes" type="text" name="minutes" value="0"><br>
+  <input type="submit" value="Start">
+</form>
+
+<p>Du hast noch <strong id="minutes-left"></strong> Sekunden</p>
+
+
+<script>
+
+function getTimeRemaining(seconds){
+  //var remaining = Math.floor( seconds % 60 );
+  return seconds - 1;
+}
+
+function countdown(event) {
+    event.preventDefault();
+    var seconds = window.document.getElementById('minutes').value;
+    console.log('seconds:' + seconds);
+
+    var interval = setInterval(function(){
+
+        if ( seconds <= 0 ) {
+          clearInterval(interval);
+        }
+        else {
+          var t = getTimeRemaining(seconds);
+          seconds = t;
+          console.log('time remaining:' + t);
+          var secondsLeft = window.document.getElementById('minutes-left');
+          secondsLeft.innerHTML = t;
+        }
+      }, 1000);
+
+      console.log('Interval:' + interval);
+}
+
+function myTimer() {
+    var d = new Date();
+    window.document.getElementById('minutes-left').innerHTML = d.toLocaleTimeString();
+}
+
+var timerElement = window.document.getElementById('timerForm');
+timerElement.addEventListener('submit', countdown);
+
+</script>
+
+</body>
+</html>
