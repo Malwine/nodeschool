@@ -6,12 +6,12 @@
 
 <form id="timerForm" action="">
   <label>Timer - Sekunden einstellen:</label>
-  <input id="minutes" type="text" name="minutes" value="0"><br>
+  <input id="seconds" type="text" name="seconds" value="0"><br>
   <input type="submit" value="Start">
 </form>
 
-<p>Du hast noch <strong id="minutes-left"></strong> Sekunden</p>
-
+<button id="resetButton" type="button" name="button">Reset</button>
+<h2>Du hast noch <strong id="minutes-left"></strong> Sekunden</h2>
 
 <script>
 
@@ -22,12 +22,17 @@ function getTimeRemaining(seconds){
 
 function countdown(event) {
     event.preventDefault();
-    var seconds = window.document.getElementById('minutes').value;
+    var seconds = window.document.getElementById('seconds').value;
+    var input = window.document.getElementById('minutes-left');
+    input.innerHTML = seconds;
     console.log('seconds:' + seconds);
 
     var interval = setInterval(function(){
+      if (seconds <= 4) {
+        document.body.style.background = "#ff0000";
+      }
 
-        if ( seconds <= 0 ) {
+      if ( seconds <= 0 ) {
           clearInterval(interval);
         }
         else {
@@ -42,13 +47,16 @@ function countdown(event) {
       console.log('Interval:' + interval);
 }
 
-function myTimer() {
-    var d = new Date();
-    window.document.getElementById('minutes-left').innerHTML = d.toLocaleTimeString();
+function reset() {
+  document.body.style.background = "#FFFFFF";
+  window.document.getElementById('seconds').value = 0;
 }
 
 var timerElement = window.document.getElementById('timerForm');
 timerElement.addEventListener('submit', countdown);
+
+var resetButton = window.document.getElementById('resetButton');
+resetButton.addEventListener('click', reset);
 
 </script>
 
