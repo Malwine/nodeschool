@@ -39,7 +39,7 @@ function countdown(event) {
             console.log(`time remaining: ${t}`);
             const minutesLeft = window.document.getElementById('minutes-left');
             const printMinutes = Math.floor(t / 60);
-            const printSeconds = Math.round(t % 60);
+            const printSeconds = ('0' + (Math.round(t % 60))).slice(-2);
             const remainingTime = `${printMinutes} : ${printSeconds}`;
             minutesLeft.innerHTML = remainingTime;
         }
