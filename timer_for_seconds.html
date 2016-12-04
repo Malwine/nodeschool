@@ -5,27 +5,26 @@
 <p>A script on this page starts this clock:</p>
 
 <form id="timerForm" action="">
-  <label>Timer - Minuten einstellen:</label>
-  <input id="minutes" type="text" name="minutes" value="0"><br>
+  <label>Timer - Sekunden einstellen:</label>
+  <input id="seconds" type="text" name="seconds" value="0"><br>
   <input type="submit" value="Start">
 </form>
 
 <button id="resetButton" type="button" name="button">Reset</button>
-<h2>Du hast noch <strong id="minutes-left"></strong> Minuten</h2>
+<h2>Du hast noch <strong id="minutes-left"></strong> Sekunden</h2>
 
 <script>
 
-function getSecondsRemaining(seconds){
-  //var remaining = Math.floor( minutes % 60 );
+function getTimeRemaining(seconds){
+  //var remaining = Math.floor( seconds % 60 );
   return seconds - 1;
 }
 
 function countdown(event) {
     event.preventDefault();
-    var minutes = window.document.getElementById('minutes').value;
-    var seconds = minutes * 60;
+    var seconds = window.document.getElementById('seconds').value;
     var input = window.document.getElementById('minutes-left');
-    input.innerHTML = minutes;
+    input.innerHTML = seconds;
     console.log('seconds:' + seconds);
 
     var interval = setInterval(function(){
@@ -37,12 +36,11 @@ function countdown(event) {
           clearInterval(interval);
         }
         else {
-          var t = getSecondsRemaining(seconds);
+          var t = getTimeRemaining(seconds);
           seconds = t;
           console.log('time remaining:' + t);
-          var minutesLeft = window.document.getElementById('minutes-left');
-          var remainingTime = Math.floor(t/60) + ' : ' + Math.round(t%60);
-          minutesLeft.innerHTML = remainingTime;
+          var secondsLeft = window.document.getElementById('minutes-left');
+          secondsLeft.innerHTML = t;
         }
       }, 1000);
 
@@ -51,7 +49,7 @@ function countdown(event) {
 
 function reset() {
   document.body.style.background = "#FFFFFF";
-  window.document.getElementById('minutes').value = 0;
+  window.document.getElementById('seconds').value = 0;
 }
 
 var timerElement = window.document.getElementById('timerForm');
