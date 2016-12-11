@@ -11,20 +11,21 @@
 </form>
 
 <button id="resetButton" type="button" name="button">Reset</button>
-<h2>Du hast noch <strong id="minutes-left"></strong> Minuten</h2>
+<h2>Du hast noch <strong id="minutes-left">0 : 00</strong> Minuten</h2>
 
 <script>
 var running = false;
+var timer = null;
+var minutesLeftOutput = window.document.getElementById('minutes-left');
 
 function getSecondsRemaining(seconds) {
     return seconds - 1;
 }
 
 function countdown(event) {
-    event.preventDefault();
     const minutes = window.document.getElementById('minutes').value;
     let seconds = minutes * 60;
-    const input = window.document.getElementById('minutes-left');
+    const input = minutesLeftOutput;
     input.innerHTML = `${minutes} : 00`;
     console.log(`seconds: ${seconds}`);
 
@@ -34,14 +35,13 @@ function countdown(event) {
         }
 
         if (seconds <= 0) {
-            clearInterval(interval);
-            running = false;
+          reset();
         } else {
             running = true;
             const t = getSecondsRemaining(seconds);
             seconds = t;
             console.log(`time remaining: ${t}`);
-            const minutesLeft = window.document.getElementById('minutes-left');
+            const minutesLeft = minutesLeftOutput;
             const printMinutes = Math.floor(t / 60);
             const printSeconds = ('0' + (Math.round(t % 60))).slice(-2);
             const remainingTime = `${printMinutes} : ${printSeconds}`;
@@ -49,15 +49,17 @@ function countdown(event) {
         }
     };
 
-    const interval = setInterval(updateTime, 1000);
+   timer = setInterval(updateTime, 1000);
 
-    console.log(`Interval: ${interval}`);
+   console.log(`Interval: ${timer}`);
 }
 
-function runCountdown(event){
+function runCountdown(event) {
+  event.preventDefault();
+
   console.log(running);
   if (running == false) {
-    countdown(event);
+    countdown();
     console.log("countdown runs");
   }
   else {
@@ -66,9 +68,12 @@ function runCountdown(event){
 }
 
 function reset(event) {
-    window.document.body.style.background = '#FFFFFF';
-    window.document.getElementById('minutes').value = 0;
-    runCountdown(event); // this shouldn't be here, but funny enough it exactly does what I want now but I want this to happen on the submit button not on reset
+   window.document.body.style.background = '#FFFFFF';
+   window.document.getElementById('minutes').value = 0;
+   running = false;
+   clearInterval(timer);
+   const input = minutesLeftOutput;
+   input.innerHTML = "0 : 00";
 }
 
 const timerElement = window.document.getElementById('timerForm');
