@@ -14,6 +14,8 @@
 <h2>Du hast noch <strong id="minutes-left"></strong> Minuten</h2>
 
 <script>
+var running = false;
+
 function getSecondsRemaining(seconds) {
     return seconds - 1;
 }
@@ -33,7 +35,9 @@ function countdown(event) {
 
         if (seconds <= 0) {
             clearInterval(interval);
+            running = false;
         } else {
+            running = true;
             const t = getSecondsRemaining(seconds);
             seconds = t;
             console.log(`time remaining: ${t}`);
@@ -50,13 +54,25 @@ function countdown(event) {
     console.log(`Interval: ${interval}`);
 }
 
-function reset() {
+function runCountdown(event){
+  console.log(running);
+  if (running == false) {
+    countdown(event);
+    console.log("countdown runs");
+  }
+  else {
+    console.log("runs already");
+  }
+}
+
+function reset(event) {
     window.document.body.style.background = '#FFFFFF';
     window.document.getElementById('minutes').value = 0;
+    runCountdown(event); // this shouldn't be here, but funny enough it exactly does what I want now but I want this to happen on the submit button not on reset
 }
 
 const timerElement = window.document.getElementById('timerForm');
-timerElement.addEventListener('submit', countdown);
+timerElement.addEventListener('submit', runCountdown);
 
 const resetButton = window.document.getElementById('resetButton');
 resetButton.addEventListener('click', reset);
