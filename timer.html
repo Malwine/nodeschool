@@ -7,7 +7,7 @@
 <form id="timerForm" action="">
   <label>Timer - Minuten einstellen:</label>
   <input id="minutes" type="text" name="minutes" value="0"><br>
-  <input type="submit" value="Start">
+  <input type="button" id="start-timer-button" value="Start">
 </form>
 
 <button id="resetButton" type="button" name="button">Reset</button>
@@ -23,11 +23,20 @@ function getSecondsRemaining(seconds) {
 }
 
 function countdown() {
-    const minutes = window.document.getElementById('minutes').value;
+    //Sanitize inputs first!
+    const minutes = parseInt(window.document.getElementById('minutes').value, 10);
+    //Guards
+    //To guard against malformed inputs
+    if(isNaN(minutes)) {
+      console.error('So geht das aber nicht!');
+      running = false;
+      return;
+    }
     let seconds = minutes * 60;
-    const input = minutesLeftOutput;
+    const input = minutesLeftOutput; //Zuweisung hier nicht unbedingt notwendig
     input.innerHTML = `${minutes} : 00`;
     console.log(`seconds: ${seconds}`);
+    running = true;
 
     const updateTime = function intervalFunc() {
         if (seconds <= 4) {
@@ -37,13 +46,12 @@ function countdown() {
         if (seconds <= 0) {
             reset();
         } else {
-            running = true;
             const t = getSecondsRemaining(seconds);
             seconds = t;
             console.log(`time remaining: ${t}`);
             const minutesLeft = minutesLeftOutput;
-            const printMinutes = Math.floor(t / 60);
-            const printSeconds = (`0 ${(Math.round(t % 60))}`).slice(-2);
+            const printMinutes = Math.floor(t / 60); //remainingMinutes
+            const printSeconds = (`0 ${(Math.round(t % 60))}`).slice(-2); //printSeconds
             const remainingTime = `${printMinutes} : ${printSeconds}`;
             minutesLeft.innerHTML = remainingTime;
         }
@@ -75,8 +83,9 @@ function reset() {
     input.innerHTML = '0 : 00';
 }
 
-const timerElement = window.document.getElementById('timerForm');
-timerElement.addEventListener('submit', runCountdown);
+// const timerElement = window.document.getElementById('timerForm');
+const timerElement = window.document.getElementById('start-timer-button');
+timerElement.addEventListener('click', runCountdown);
 
 const resetButton = window.document.getElementById('resetButton');
 resetButton.addEventListener('click', reset);
